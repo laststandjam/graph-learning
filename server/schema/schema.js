@@ -6,15 +6,16 @@ const {
   GraphQLString,
   GraphQLSchema,
   GraphQLID,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = graphql;
 
 //dummy data
 var books = [
-  { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: '1' },
-  { name: "The Final Empire" },
-  { name: "The Final Empire", genre: "Fantasy", id: 2, authorId:'2' },
-  { name: "The long earth", genre: "Sci-Fi", id: 3, authorId:'3' }
+  { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: "1" },
+  { name: "The Final Empire", genre: "Fantasy", id: "2", authorId:"2" },
+  { name: "The long earth", genre: "Sci-Fi", id: "3", authorId:"1" },
+  { name: "The Hero of Ages", genre: "Fantasy", id:"4", authorId: "2"}
 ];
 const authors = [
   { name: "Patrick Rothfuss", age: 44, id: "1" },
@@ -30,9 +31,8 @@ const BookType = new GraphQLObjectType({
     author: {
         type: AuthorType,
         resolve(parent, args){
-            console.log(parent);
             console.log(parent)
-            return _find(authors,{id: parent.authorId})
+            return _.find(authors,{id: parent.authorId})
         }
     }
   })
@@ -42,7 +42,13 @@ const AuthorType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    books:{
+      type: new  GraphQLList(BookType),
+      resolve(parent, args){
+        return _.filter(books, {authorId: parent.id})
+      }
+    }
   })
 });
 
