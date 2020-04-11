@@ -11,10 +11,10 @@ const {
 
 //dummy data
 var books = [
-  { name: "Name of the Wind", genre: "Fantasy", id: "1" },
+  { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: '1' },
   { name: "The Final Empire" },
-  { name: "The Final Empire", genre: "Fantasy", id: 2 },
-  { name: "The long earth", genre: "Sci-Fi", id: 3 }
+  { name: "The Final Empire", genre: "Fantasy", id: 2, authorId:'2' },
+  { name: "The long earth", genre: "Sci-Fi", id: 3, authorId:'3' }
 ];
 const authors = [
   { name: "Patrick Rothfuss", age: 44, id: "1" },
@@ -26,7 +26,15 @@ const BookType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    genre: { type: GraphQLString }
+    genre: { type: GraphQLString },
+    author: {
+        type: AuthorType,
+        resolve(parent, args){
+            console.log(parent);
+            console.log(parent)
+            return _find(authors,{id: parent.authorId})
+        }
+    }
   })
 });
 const AuthorType = new GraphQLObjectType({
