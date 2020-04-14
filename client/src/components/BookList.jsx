@@ -1,6 +1,7 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo"
+import { useQuery } from "@apollo/react-hooks";
 
 const getBooksQuery = gql`
   {
@@ -11,12 +12,13 @@ const getBooksQuery = gql`
   }
 `;
 
+
 const BookList = () => {
-  
+  const data= useQuery(getBooksQuery)
   return (
    
     <div className="App"> 
-    {console.log(getBooksQuery)}
+    {console.log(data)}
       <ul id="book-list"> </ul>
       <li>Book name</li>
     </div>
