@@ -1,11 +1,20 @@
-import React from "react";
-import { gql } from "apollo-boost";
+import React, {useState} from "react";
 import { useQuery } from "@apollo/react-hooks";
 import {getAuthorsQuery} from "../queries/queries"
 
 const AddBook = () => {
+  const [name, setName] = useState("")
+  const [genre, setGenre] = useState("")
+  const [authorId, setAuthorId] = useState("")
+ 
   const query = useQuery(getAuthorsQuery);
 
+  const onChange = set=>e=>{
+    const {target} = e;
+    const { value } = target
+    set(value)
+
+  }
  
   const displayAuthors = () => {
     if (query.loading) {
@@ -21,12 +30,12 @@ const AddBook = () => {
     <form id="add-book">
       <div className="field">
         <label>Book name:</label>
-        <input type="text" />
+        <input type="text"  name="name" onChange={onChange(setName)}/>
       </div>
 
       <div className="field">
           <label>Genre:</label>
-          <input type="text"/>
+          <input type="text" name="genre" onChange={onChange(setGenre)}/>
       </div>
 
         <div className="field">
